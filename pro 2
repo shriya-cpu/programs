@@ -1,0 +1,124 @@
+2.	Docker Installation and Deployment
+Method 1: In ubuntu terminal
+Okay first make sure vs code is installed(steps are given in above program start)
+Now in terminal put these commands to install docker(we need internet connection):
+sudo apt update
+sudo apt install docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+Check if docker is installed:
+sudo docker –version
+Next, try ubuntu image:
+sudo docker run -it ubuntu
+type ls
+exit
+Manage containers:
+sudo docker ps -a #show all containers
+sudo docker rmi <name>  # Remove an image
+Then in files create a new folder:flask-docker
+Inside that in vs code:
+App.py: (a is in small)
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello from Docker!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
+requirements.txt:
+flask
+Dockerfile:
+FROM python:3.8-slim
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+CMD ["python", "app.py"]
+The build and run(put in ubuntu terminal):
+cd flask-docker #go to that folder #make sure you copy correct path otherwise it will say no such file exists.
+sudo docker build -t flask-app . #if it doesn’t work add sudo before docker
+sudo docker run -d -p 5000:5000 flask-app
+You will see: http://localhost:5000 paste this link in file explorer->google(if you want)
+
+OR NOW IF YOU WANT TO USE DESKTOP INSTEAD OF UBUNTU THESE ARE THE STEPS
+1.First check if docker desktop is installed, in start button you should see if not we need to install it:
+Before installing, you need to check a few things:
+Go to start button put winver
+Okay there windows 11 should come
+Then we need to check if virtualization is enabled or not for that
+Press ctrl+shift+escape button
+and go to performance in side bar, there you will go down and check if virtualization is enabled, it should be
+Then third one:WSL installation for thatgo to cmd in start button, command prompt will open, there put:
+wsl
+It should come linux version, if not they then you just press any key it will start the installation, it willask for permission just click on S.
+Okay now once all this is over go to:https://www.docker.com/products/docker-desktop/
+Then go to your account 1by22cs194@bmsit.in, password:kinsella1234$ in work section, it might need to restart restart it.
+
+2. Go to your Desktop
+Create a new folder: flask-docker
+Open VS Code, then open the folder: Desktop > flask-docker
+
+3.Now we will create 3 files, in this:
+app.py:
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello from Docker!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
+requirements.txt:
+flask
+
+Dockerfile:
+FROM python:3.8-slim
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+CMD ["python", "app.py"]
+
+4. Now run it in vs code terminal only:
+cd ~/Desktop/flask-docker (only if your not using vs code terminal)
+docker build -t flask-app .
+docker run -d -p 5000:5000 flask-app
+
+5. Now for output:
+Go to:http://localhost:5000/
+It should show Welcome to Docker!
+OR go to your docker desktop
+There you should see a container and if u run that container also you should see same output. If docker desktop is not opening go to tak manager remove all the 
+Windows subsystem for linex by choosing end task. Then go to docker desktop again in start button and click on run as adminstrator, it should open.
+
+Now if you want to fake output, make some folder open vs code, put file:
+server.py:
+import http.server
+import socketserver
+
+PORT = 5000
+
+class Handler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        # Always send the same response
+        self.send_response(200)
+        self.send_header("Content-type", "text/plain")
+        self.end_headers()
+        self.wfile.write(b"Welcome to Docker!")
+
+with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    print(f"Serving at http://localhost:{PORT}")
+    httpd.serve_forever()
+
+Then in vs code terminal run:python server.py
+That's all, in port 5000 u will get Welcome to Docker!
+
+For viva:
+docker ps -a             # See all containers
+docker stop <id>         # Stop a running container
+docker rm <id>           # Remove container
+docker images            # View images
+docker rmi <image-name>  # Delete image
