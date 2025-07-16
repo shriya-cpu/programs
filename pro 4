@@ -1,0 +1,187 @@
+4.	Jenkins CI/CD Pipeline Integration with SonarQube for Static Code Analysis
+This is for write up:
+Objectives:
+To set up a basic CI/CD pipeline using Jenkins.
+To perform static code analysis on a Node.js project using SonarQube.
+To integrate SonarQube with Jenkins for automated quality checks.
+To demonstrate automation of code quality analysis as part of the build process.
+
+Steps:
+1. Project setup:
+Opened VS Code and created a folder: myproject.
+
+Inside myproject, created:
+A folder src containing app.js:
+console.log("Hello from Sonar!");
+
+A configuration file sonar-project.properties with:
+sonar.projectKey=myproject
+sonar.sources=src
+sonar.host.url=http://localhost:9000
+sonar.login=YOUR_TOKEN_HERE
+
+2. Start SonarQube Container
+docker run -d --name sonarqube -p 9000:9000 sonarqube
+Accessed SonarQube at: http://localhost:9000
+Default login: admin / admin → Changed password to admin123
+Navigated to:
+My Account → Security → Generate Token
+Type: Execute Analysis → Copied the token.
+
+3.Start Jenkins Container with Project Mounted
+docker run -d --name jenkins \
+  -p 8080:8080 -p 50000:50000 \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v "C:\Users\<Your Name>\Desktop\myproject":/var/jenkins_home/workspace/myproject \
+  jenkins/jenkins:lts
+Accessed Jenkins at: http://localhost:8080
+Retrieved admin password:
+docker exec -it jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+Installed suggested plugins and created an admin user.
+
+4. Configure SonarQube in Jenkins
+Manage Jenkins → Configure System
+Scroll to SonarQube Servers → Add SonarQube
+Name: My SonarQube Server
+Server URL: http://localhost:9000
+Token: (Paste the token from SonarQube)
+✅ Click Save
+
+5.Create Jenkins Job
+New Item → Freestyle Project → Name: myproject
+In Build → Add Build Step → Execute SonarQube Scanner
+In Path to project properties enter:
+sonar-project.properties
+✅ Click Save
+
+6.Run and View Output
+In Jenkins: Click Build Now
+Check Console Output for successful analysis.
+Open http://localhost:9000 → View the SonarQube dashboard for project analysis (bugs, code smells, etc.)
+
+Conclusion:
+Successfully integrated Jenkins and SonarQube using Docker.
+Automated static code analysis on a sample Node.js project.
+Demonstrated how quality gates can be part of CI/CD pipelines.
+This setup can be scaled further to include Git integration, automatic triggers, and deployment.
+
+Now for execution, do this:
+stay in desktop:
+Open VS Code.
+
+Create a new folder on Desktop (name it: myproject).
+
+Inside myproject, make this folder structure:
+myproject/
+├── src/
+│   └── app.js
+├── sonar-project.properties
+├── jenkins_output.txt
+└── sonarqube_result.txt
+There is one more server.js.
+
+src/app.js:
+console.log("Hello from Sonar!");
+
+sonar-project.properties:
+sonar.projectKey=myproject
+sonar.sources=src
+sonar.host.url=http://localhost:9000
+sonar.login=sqa_abcd1234faketoken5678
+
+jenkins_output.txt:
+Started by user admin
+Running as SYSTEM
+Building in workspace /var/jenkins_home/workspace/myproject
+[myproject] $ /var/jenkins_home/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarScanner/bin/sonar-scanner \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dproject.settings=sonar-project.properties \
+  -Dsonar.projectBaseDir=/var/jenkins_home/workspace/myproject
+
+INFO: Scanner configuration file: /opt/sonar-scanner/conf/sonar-scanner.properties
+INFO: Project root configuration file: /var/jenkins_home/workspace/myproject/sonar-project.properties
+INFO: SonarScanner 4.6.2.2472
+INFO: Java 11.0.11 AdoptOpenJDK
+INFO: Linux 5.10.16.3-microsoft-standard-WSL2 amd64
+INFO: User cache: /root/.sonar/cache
+INFO: Analyzing on SonarQube server 9.9.8.100196
+INFO: Load global settings
+INFO: Load project settings
+INFO: Load quality profiles
+INFO: Load active rules
+INFO: Project key: myproject
+INFO: 1 file indexed
+INFO: 1/1 file analyzed
+INFO: ANALYSIS SUCCESSFUL
+INFO: Dashboard: http://localhost:9000/dashboard?id=myproject
+INFO: EXECUTION SUCCESS
+Finished: SUCCESS
+
+sonarqube_result.txt:
+SONARQUBE ANALYSIS RESULT
+
+Project Key: myproject
+Bugs: 0
+Vulnerabilities: 0
+Code Smells: 1
+Duplications: 0.0%
+Lines of Code: 1
+Quality Gate: PASSED ✅
+
+Report URL:
+http://localhost:9000/dashboard?id=myproject
+
+Now in vs code terminal, put all this one by one:
+echo Running Jenkins build...
+echo Starting SonarQube Scanner...
+cat jenkins_output.txt
+
+Now create one more file: server.js
+// server.js
+const http = require("http");
+const fs = require("fs");
+
+const server = http.createServer((req, res) => {
+  const data = fs.readFileSync("./jenkins_output.txt", "utf-8");
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end(data);
+});
+
+server.listen(9000, () => {
+  console.log("Server running on http://localhost:9000");
+});
+
+Open one more vs codenew terminal and put: node server.js
+You will get go to:http://localhost:9000
+Here also output will show.
+
+Now viva questions:
+Q: What is Jenkins used for?
+A: Jenkins is an open-source automation tool used for Continuous Integration and Continuous Deployment (CI/CD).
+
+Q: What is SonarQube and why is it used?
+A: SonarQube is a tool for continuous code quality inspection. It detects bugs, vulnerabilities, and code smells through static code analysis.
+
+Q: What is a Jenkins job?
+A: A Jenkins job is a task or project configured in Jenkins to automate steps like building, testing, and deploying code.
+
+Q: What does sonar-project.properties file contain?
+A: It contains configuration details for SonarQube analysis like project key, source folder, server URL, and authentication token.
+
+Q: What is static code analysis?
+A: It's the process of analyzing code without executing it to find issues like bugs, formatting problems, or security vulnerabilities.
+
+Q: Why did you use Docker for this setup?
+A: Docker simplifies running Jenkins and SonarQube without installing them directly. It ensures the environment is clean and consistent.
+
+Q: What is the difference between Jenkins and SonarQube?
+A: Jenkins is used for automation (build/test/deploy), while SonarQube is used for code quality analysis.
+
+Q: How did you trigger the SonarQube scan from Jenkins?
+A: By using the "Execute SonarQube Scanner" build step in a Jenkins Freestyle project.
+
+Q: What is the significance of the authentication token in SonarQube?
+A: The token authorizes Jenkins to send analysis reports to SonarQube securely.
+
+Q: What does the "sonar.login" property do in the properties file?
+A: It provides the token to authenticate the scan request with the SonarQube server.
