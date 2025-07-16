@@ -1,0 +1,103 @@
+6.	Build and Run a Java Application with Maven. Migrate the same Application to Gradle. Create a Maven Project. Understand the POM file, Dependency Management and Plugins.
+Simlar to program 5
+Steps:
+1. Step 1. Install Gradle
+Go to: Gradle Releases
+Download binary-only ZIP (e.g. gradle-8.7-bin.zip)
+Extract it to:
+C:\Gradle\gradle-8.7
+
+2. Set Environment Variables:
+Open Environment Variables window
+Click Start, type “Environment Variables”
+Click “Edit the system environment variables”
+In System Properties → Click “Environment Variables…”
+Set GRADLE_HOME
+Under System variables, click New…
+Variable name: GRADLE_HOME
+Variable value: C:\Gradle\gradle-8.7(copy the real path)
+⚠️ Make sure this path is where you actually extracted Gradle.
+Add Gradle bin to Path
+Under System variables, find Path
+Click Edit…
+Click New
+Add:
+%GRADLE_HOME%\bin
+Click OK on all windows to save.
+
+3. Open normal command prompt:
+gradle -v
+
+4. Remove maven's pom.xml(from prev program, see that full structure is there)
+Add new file:
+build.gradle:
+
+plugins {
+    id 'java'
+}
+group = 'com.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+Now one more file:
+settings.gradle:
+
+rootProject.name = 'demo-project'
+
+Folder will look like:
+demo-project
+ ├── build.gradle
+ ├── settings.gradle
+ └── src
+     └── main
+         └── java
+             └── com
+                 └── example
+                     └── App.java
+5. Build and run using gradle(okay now open command prompt run it there, because vs code terminal uses powershell)
+Go to that path using cd(you'll see path in vs code terminal)
+In command prompt:
+gradle build
+java -cp build/libs/demo-project-1.0-SNAPSHOT.jar com.example.App
+
+Output:
+✅ Hello from Maven Project!
+
+To fake output, see prev program its there.
+
+Viva questions:
+What is Gradle?
+Answer:
+Gradle is a build tool like Maven. It helps build, compile, and run Java projects easily.
+2. Why did you use Gradle here?
+Answer:
+To build the same Java project using Gradle instead of Maven and learn both build tools.
+ 3. What is the difference between Maven and Gradle?
+Answer:
+Maven uses pom.xml, while Gradle uses build.gradle file. Gradle is faster and uses a scripting approach.
+4. What is build.gradle?
+Answer:
+It is the configuration file for Gradle projects, like pom.xml for Maven.
+5. How did you build your project using Gradle?
+Answer:
+I used the command:
+gradle build
+6. How did you run your Java program after building with Gradle?
+Answer:
+Using:
+java -cp build/libs/demo-project-1.0-SNAPSHOT.jar com.example.App
+7. What was the output of your program?
+Answer:
+Hello from Maven Project!
