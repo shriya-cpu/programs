@@ -1,0 +1,169 @@
+5.	Maven Project:
+Objective:
+To install Apache Maven, configure it with Java JDK, 
+and create a basic Maven Java project manually in VS Code to understand project structure, build, and execution process.
+
+Steps:
+1. Download and Install Java JDK
+Go to: JDK 21 Archive Downloads
+Download Windows x64 Installer (e.g., jdk-21_windows-x64_bin.exe)
+Run the installer → click Next → Next → Done
+
+2.Check Java Installation
+Open Command Prompt
+Type:
+java -version
+
+3.  Download Maven
+Go to: Maven Download Page
+Download apache-maven-3.9.6-bin.zip
+(⚠️ Not src.zip or .tar.gz)
+
+4.Nw we need to extract maven, okay before that
+Open file explorer,go to:C:\Program Files
+Now inside program files create new folder:Apache and inside that new folder:Maven
+So final path:
+C:\Program Files\Apache\Maven
+So extract it, in this path.
+
+5.Now set environment variables:
+Open Environment Variables
+Click Start → type “Environment Variables”
+Click “Edit the system environment variables”
+In the window that opens, click “Environment Variables…” button at the bottom.
+Set MAVEN_HOME
+Under System Variables → click New
+Enter:
+Variable name: MAVEN_HOME
+Variable value: C:\Program Files\Apache\Maven\apache-maven-3.9.10
+✔️ Click OK
+Then we are going to add MAVEN to path,
+In System Variables, find the Path variable → click Edit
+Click New, and add:
+C:\Program Files\Apache\Maven\apache-maven-3.9.10\bin
+✔️ Click OK on all windows to save and exit.
+
+6. Now JAVA_HOME also we have to add:
+Find your JDK installation folder:
+Go to:
+C:\Program Files\Java
+You will see a folder like:
+jdk-21
+Copy its full path(you have to right click)
+For example, it will be something like this:C:\Program Files\Java\jdk-21.0.1
+Now, set JAVA_HOME environment variables:
+Open Environment Variables (same as earlier)
+🔹 Under System Variables, click New
+Variable name: JAVA_HOME
+Variable value: paste the path you copied above(REMEMBER TO REMOVE THE QUITES FROM THE PATH)
+✔️ Click OK
+Now, add Java bin folder to path:
+In System Variables, select Path → click Edit
+Click New, and add:
+%JAVA_HOME%\bin
+✔️ Click OK on all windows to save and exit.
+Verify JAVA_HOME is set correctly
+Open new Command Prompt
+Type:
+echo %JAVA_HOME%
+➡️ It should show your JDK path.
+Finally, check Maven version again:
+mvn -v
+
+7. Create Maven Project
+Now in file explorer, under desktop make new folder: demo-project
+Inside demo-project new folder src
+Inside src new folder main
+Inside main new folder java
+Inside java new folder com
+Inside com new folder example
+Okay now go to vs code, open demo-project folder(all of the folders will come like /../ its normal)
+Now inside example folder, put FILE App.java
+In App.java:
+package com.example;
+
+public class App {
+    public static void main(String[] args) {
+        System.out.println("✅ Hello from Maven Project!");
+    }
+}
+Now under demo-project folder, make one more FILE pom.xml.
+In pom.xml:
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>demo-project</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+8. Now compile the project(in vs code temrinal only):
+mvn compile
+
+9.Package the project:
+mvn package
+
+10.Run the program:
+java -cp target/demo-project-1.0-SNAPSHOT.jar com.example.App
+Output(in vs code terminal only you will see):
+✅ Hello from Maven Project!
+
+Conclusion:
+Today, I learned how to install Maven and Java, set them up on my laptop, and create a basic Maven project. 
+I ran my Java program using Maven and saw the output.
+✔️ Now I understand how Maven helps build and run Java projects easily.
+
+Okay now, if you want to fake output do this:
+Make Hello.java in vs code:
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("✅ Hello from Maven Project!");
+    }
+}
+Now in vs code terminal run:
+javac Hello.java
+java Hello
+
+Output will be:
+✅ Hello from Maven Project!
+
+Viva questions:
+. What is Maven?
+Answer:
+Maven is a build tool for Java projects. It helps compile, build, and manage libraries easily.
+2. Why do we use Maven?
+Answer:
+To automate building Java projects and manage dependencies without doing everything manually.
+3. What is pom.xml?
+Answer:
+It is a configuration file in Maven projects where we define project details, Java version, and dependencies.
+4. What does your program do?
+Answer:
+It prints “Hello from Maven Project!” to show Maven is working.
+5. Which command is used to compile Maven project?
+Answer:
+mvn compile
+ 6. Which command is used to build the jar file?
+Answer:
+mvn package
+7. How do you run the program after packaging?
+Answer:
+Using:
+java -cp target/demo-project-1.0-SNAPSHOT.jar com.example.App
