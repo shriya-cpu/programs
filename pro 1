@@ -1,0 +1,132 @@
+Program 1:
+1.	Version Control Using Git in Browser(open github inside firefox of ubunut->google )
+Objective: Learn to use GitHub/GitLab/Bitbucket to manage projects.
+First do this:
+Now install vs code in ubuntu.
+Put download vs code for linux choose .deb one and start download
+Then go on ubuntu terminal and put this command: 
+cd ~/Downloads
+sudo apt install ./code*.deb
+Now search it should be there.
+Or else for getting vs code:
+sudo snap install code –classic #install
+code #open
+Inside vs code put some basic html file(inside some folder):
+Index.html:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My First Page</title>
+</head>
+<body>
+  <h1>Hello from VS Code!</h1>
+  <p>This is a simple HTML page.</p>
+</body>
+</html>
+Lab Steps:
+1. Sign Up at GitHub or GitLab.
+2. Create a New Repository:
+o Click New Repository.
+o Provide a name and description.
+o Add a README.md file.
+3. Upload Files Manually(open that folder with index.html in vs code)
+o Click Add File > Upload File.
+o Select files and commit changes.
+4. Modify Files Online:
+o Open a file and click Edit.(just add another tag at the top)
+o Make changes and commit.
+5. Check File History:
+o Open a file and click History.
+Expected Output:
+• A version-controlled project with a history of changes.
+
+Version Control Using Git with Push and Pull Commands
+Objective: Use Git for version control from the terminal.
+Lab Steps:
+a) Install Git (if not installed):
+b) sudo apt update
+c) sudo apt install git -y
+d) Configure Git:
+e) git config --global user.name "Your Name" //1BY22CS194
+f) git config --global user.email   “you@example.com “
+g) Clone an Existing Repository:
+h) git clone <repository_url>  //go to code green box in repository copy that link
+i) cd <repo_name> //don’t put <> the brackets
+j) Modify a File & Commit Changes:
+k) echo "New changes" >> file.txt
+l) git add .
+m) git commit -m "Updated file"
+n) Push to Remote Repository:
+o) git push origin main
+okay now when you put this, it will ask to give your username and password of github account, now even if you put correct password it will say failed to authenticate.
+So you have to generate token. Now for this, go to settings not repository your personal(under you account)->there go to develop setting-> and there there will be generate token option
+There go to generate new token option and choose the classic one
+Under note put name of token:GitUbuntuPush
+And then on select scopes click on repo.
+And then click on generate token.(make sure you scroll down and select/click on that green generate token button)
+You will get some code(won’t be too long) copy it immediately, it won’t be showed again.
+Now put git push origin main again
+Then for username: 1BY22CS194
+Password: put that token you copy (ctrl+shift+v) first hold/click ctrl and shift normally and then hold/click on v. okay and then enter(you won’t see anything that’s normal)
+p) Pull Latest Changes:
+q) git pull origin main
+Expected Output:
+• Changes should be reflected on GitHub/GitLab.(you should see file.txt under your repository)
+
+OKAY NOW SUPPOSE YOU WANT TO DO THE ENTIRE THING ON DESKTOP STEPS ARE
+1. Install vs code on windows, if its not there
+Go to:https://code.visualstudio.com/
+Click download for windows, go to .exe file
+Run the install, keep all the defaults
+After installation open vs code from start menu
+
+2. Create a simple HTML Page
+Got to vs code: make folderMyFirstProject inside that index.html:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My First Page</title>
+</head>
+<body>
+  <h1>Hello from VS Code!</h1>
+  <p>This is a simple HTML page.</p>
+</body>
+</html>
+
+3. Login to gihun, gmail:1by22cs194@bmsit.in and password:kinsella1234$
+Create repository:MyFirstRepo and add a readme.md file too
+
+4.Upload files manually to github:
+click on upload file and add the index.html.
+Scroll down add a commit message and then click on commit changes.
+
+5.Modify the files online:
+On GitHub, open the index.html file → click the ✏️ edit icon.
+Add a new tag (e.g., <h2>Edited on GitHub</h2>).
+Scroll down → commit the changes.
+Click on History tab to see file version histor
+You should see the latest update
+
+6.Version Control using push and pull commands:
+Go to vs code terminal, under your project folder
+Now in vs code terminal put:
+git config --global user.name "1BY22CS194"
+git config --global user.email "1by22cs194@bmsit.in"
+git clone https://github.com/1BY22CS194/MyFirstRepo.git
+cd MyFirstRepo
+echo "New changes" >> file.txt
+git add .
+git commit -m "Updated file"
+git push origin main
+Now in this line there might be error so then,
+Go to start button search credential manager->windows creditionals
+Find and remove any credentials that start with git or just have git in them
+Now again put:git push origin main
+It should take to github credential manager, they will ask for passowrd and account name just put it
+Then: git pull origin main
+Now, file.txt should appear
+Now in case instead of this error if in git push origin main they start asking for username and password, then you have to do that token logic, its there in the above method.
