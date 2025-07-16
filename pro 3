@@ -1,0 +1,132 @@
+3.	Design Deploy and Manage Microservice Architecture using Docker
+Aim: To simulate deployment of basic microservice 
+Pre-reuisite: docker desktop has to be installed on system
+Steps:
+STAY IN DESKTOP
+If docker desktop is not downloaded download it(choose 64 bit), mostly it will be downloaded, if its not ask them for internet connection(docker desktop installation
+proper steps are there in prev program, u can see that if it is not installed)
+You want to go to start button and put docker desktop:run as adminstrator, if it does not open but it is installed, then do this:
+Go to task manager in start button, and al windows subsystem ones thata re there end tak and remove it, now again try opening it, it should open
+Docker hub account: username:1by22cs194@bmsit.in
+                                      Password:kinsella1234$
+Then go to file explorer create folder microservice-app
+Inside app folder:
+1. App. Py (a in small):
+# File: app/app.py
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Hello from Microservice App!"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+
+
+2.Requirements.txt(r in small):
+flask
+
+ 3.DockerFile
+# File: app/Dockerfile
+FROM python:3.9
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY . .
+
+CMD ["python", "app.py"]
+
+4. In seprate folder/file put this:docker-compose.yml
+version: '3'
+services:
+  web:
+    build: ./app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: sampledb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3306:3306"
+
+In vs code terminal run:
+sudo docker compose up --build
+go to this link:http://localhost:5000/
+or directly in docker desktop you should see a container:microservice-app and click on it, 2 more thing will appear run them, you shoukd see
+welcome to microservice app!
+To stop container(do not do it, just if ma'am asks)
+docker-compose down
+
+TO FAKE OUTPUT DO SAME THING AS PREVIOUS CODE, JUST CHANGE THE PRINT STATEMEN THAT'S ALL.
+
+Viva:
+docker-compose up --build Builds and starts all services defined in the Compose file
+docker ps Lists all running containers (for verification)
+docker-compose down Stops and removes all containers, networks, and volumes created
+
+NOW SEE IN CASE WINDOWS DOES NOT HAVE DOCKER DESKTOP
+USE UBUNTU
+STEPS:
+1.Open ubuntu in VMWare
+2.Install Docker+ Compose in Ubuntu
+sudo apt update
+sudo apt install -y docker.io docker-compose
+sudo systemctl start docker
+sudo systemctl enable docker
+3.	Check Docker
+docker –version
+docker compose version
+OR IF IT DOES NOT WORK IN TERMINAL
+ps aux | grep -i apt
+you will see:root      1234  0.0  0.1  123456  5678 ?  S   10:00   0:00 apt-get update
+sudo kill -9 <PID> whic is 1234 without bracket
+sudo rm /var/lib/apt/lists/lock
+sudo rm /var/cache/apt/archives/lock
+sudo rm /var/lib/dpkg/lock*
+sudo dpkg --configure -a
+sudo apt update
+sudo apt install -y docker.io docker-compose-plugin
+sudo systemctl enable docker
+sudo systemctl start docker
+docker --version
+docker compose version
+
+4.	Then do same project folder in vs code
+5.	In ubuntu terminal run:
+docker compose up –build
+Running on http://0.0.0.0:5000
+Go to ubuntu firefox and put it
+THIS IS MUCH EASIER IS MA’AM ACCEPTS DO THIS
+IF YOU HAVE TO PUSH TO DOCKER HUB FROM UBUNTU:
+docker build -t yourusername/microservice-app ./app
+docker login
+docker push yourusername/microservice-app
+
+VIVA QUESTIONS:
+Q: What is Docker?
+A: Docker is a platform that lets us package applications into containers, which run the same everywhere regardless of the environment.
+
+Q: What is a container?
+A: A container is a lightweight, standalone package that contains everything needed to run a program (code, dependencies, runtime, etc.).
+
+Q: What is the use of Dockerfile?
+A: Dockerfile contains instructions to build a Docker image. It tells Docker how to set up the environment and run the application.
+
+Q: What is Docker Compose?
+A: Docker Compose is a tool used to run and manage multiple Docker containers using a single YAML file.
+
+Q: What is a microservice?
+A: A microservice is a small, independent service that performs a single function and can communicate with other services over a network.
